@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Railing Manual</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --text: #1a1a1a;
+    --text-secondary: #555550;
+    --text-tertiary: #999990;
+    --border: rgba(0,0,0,0.12);
+    --border-mid: rgba(0,0,0,0.22);
+    --accent: #3a3a3a;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18;
+      --bg-secondary: #242422;
+      --text: #f0ede8;
+      --text-secondary: #aaa89f;
+      --text-tertiary: #666660;
+      --border: rgba(255,255,255,0.1);
+      --border-mid: rgba(255,255,255,0.2);
+      --accent: #d0cdc8;
+    }
+  }
+
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--bg-secondary);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-left: 0.5px solid var(--border);
+    border-right: 0.5px solid var(--border);
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .topbar-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .burger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    padding: 4px;
+    font-size: 22px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .page { padding: 20px 18px; display: none; flex: 1; }
+  .page.active { display: block; }
+
+  .hero { padding: 28px 0 20px; }
+  .hero h1 { font-size: 22px; font-weight: 700; line-height: 1.3; margin-bottom: 10px; }
+  .hero p { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .nav-list { list-style: none; }
+  .nav-list li { border-top: 0.5px solid var(--border); }
+  .nav-list li:last-child { border-bottom: 0.5px solid var(--border); }
+
+  .nav-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    font-size: 13px;
+    color: var(--text);
+    text-align: left;
+    font-family: 'Courier New', Courier, monospace;
+    gap: 8px;
+  }
+
+  .nav-btn:hover { color: var(--text-secondary); }
+  .nav-btn .meta { font-size: 11px; color: var(--text-tertiary); flex-shrink: 0; }
+  .nav-btn .arrow { font-size: 14px; color: var(--text-tertiary); flex-shrink: 0; }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 0 0 16px;
+    margin-bottom: 4px;
+    border-bottom: 0.5px solid var(--border);
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .back-btn:hover { color: var(--text); }
+
+  .page-title { font-size: 19px; font-weight: 700; margin: 16px 0 6px; line-height: 1.25; }
+  .page-subtitle { font-size: 12px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 20px; }
+
+  .placeholder-block {
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin: 10px 0;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    border-left: 2px solid var(--border-mid);
+  }
+
+  .placeholder-block strong {
+    color: var(--text-secondary);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 0.5px solid var(--border-mid);
+    margin: 2px 2px 2px 0;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .card {
+    background: var(--bg);
+    border: 0.5px solid var(--border-mid);
+    border-radius: var(--radius);
+    padding: 12px;
+    cursor: pointer;
+  }
+
+  .card:hover { background: var(--bg-secondary); }
+  .card-label { font-size: 10px; color: var(--text-tertiary); margin-bottom: 4px; }
+  .card-title { font-size: 13px; font-weight: 700; }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border-mid);
+    flex-shrink: 0;
+  }
+
+  .dot.live { background: #4a8c2a; }
+
+  /* Drawer */
+  .drawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    height: 100%;
+    background: var(--bg);
+    z-index: 20;
+    overflow-y: auto;
+    padding: 20px 18px;
+    border-left: 0.5px solid var(--border);
+    border-right: 0.5px solid var(--border);
+  }
+
+  .drawer.open { display: block; }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .drawer-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 22px;
+    padding: 4px;
+    line-height: 1;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .drawer-section-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    margin: 16px 0 4px;
+  }
+
+  .drawer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 0.5px solid var(--border);
+    font-size: 13px;
+    cursor: pointer;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    width: 100%;
+    color: var(--text);
+    text-align: left;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .drawer-item:last-child { border-bottom: 0.5px solid var(--border); }
+  .drawer-item:hover { color: var(--text-secondary); }
+  .drawer-item .arrow { font-size: 13px; color: var(--text-tertiary); }
+
+  @media (min-width: 500px) {
+    body { padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div class="topbar">
+    <span class="topbar-title" id="topbar-title">Railing Manual</span>
+    <button class="burger" id="menu-btn" aria-label="Open navigation">&#9776;</button>
+  </div>
+
+  <!-- HOME -->
+  <div id="page-home" class="page active">
+    <div class="hero">
+      <h1>Build from what's already there</h1>
+      <p>An open-source manual for informal construction using publicly owned railings — attachment logics, ground conditions, legal grey zones.</p>
+    </div>
+    <div class="status-row">
+      <span class="dot live"></span> Chicksand Estate, Whitechapel — live test case
+    </div>
+    <div class="section-label">Start here</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('find-condition')"><span>Find your condition</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn" onclick="go('railing-taxonomy')"><span>Railing taxonomy</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn" onclick="go('prototype-library')"><span>Prototype library</span><span class="arrow">→</span></button></li>
+    </ul>
+    <div class="section-label">Test case</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('chicksand-map')"><span>Chicksand map</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn" onclick="go('politics')"><span>Politics / grey zone</span><span class="arrow">→</span></button></li>
+    </ul>
+    <div class="section-label">Contribute</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('toolkit')"><span>Toolkit / downloads</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn" onclick="go('contribute')"><span>Add your knowledge</span><span class="arrow">→</span></button></li>
+    </ul>
+  </div>
+
+  <!-- FIND YOUR CONDITION -->
+  <div id="page-find-condition" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Find your condition</div>
+    <div class="page-subtitle">What kind of railing are you working with? What's on the ground? What do you want to build?</div>
+    <div class="placeholder-block"><strong>[ Filter / decision tree ]</strong>Describe your site condition — railing type, ground surface, load intent — and the manual routes you to the right section.</div>
+    <div class="section-label">Filter by</div>
+    <div style="margin-bottom:12px">
+      <span class="tag">Horizontal tube</span><span class="tag">Vertical bar</span><span class="tag">Estate boundary</span><span class="tag">Staircase rail</span><span class="tag">Concrete plinth</span><span class="tag">Tarmac</span><span class="tag">Grass</span><span class="tag">Shared surface</span>
+    </div>
+    <div class="placeholder-block"><strong>[ Results ]</strong>Matching railing types, attachment logics, and prototype precedents will list here once filters are applied.</div>
+  </div>
+
+  <!-- RAILING TAXONOMY -->
+  <div id="page-railing-taxonomy" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Railing taxonomy</div>
+    <div class="page-subtitle">A catalogue of railing types found on council estates in East London, organised by profile, material, and ownership.</div>
+    <div class="placeholder-block"><strong>[ Taxonomy diagram ]</strong>Illustrated matrix of railing types — tube diameter, bar spacing, weld quality, surface coating — cross-referenced with estate typology.</div>
+    <div class="section-label">Types</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('railing-type')"><span>Mild steel horizontal tube</span><span class="meta">Most common</span></button></li>
+      <li><button class="nav-btn"><span>Vertical flat-bar estate fence</span></button></li>
+      <li><button class="nav-btn"><span>Stair handrail (circular)</span></button></li>
+      <li><button class="nav-btn"><span>Parking barrier</span></button></li>
+      <li><button class="nav-btn"><span>Balcony edge rail</span></button></li>
+    </ul>
+  </div>
+
+  <!-- ONE RAILING TYPE -->
+  <div id="page-railing-type" class="page">
+    <button class="back-btn" onclick="go('railing-taxonomy')">← Railing taxonomy</button>
+    <div class="page-title">Mild steel horizontal tube</div>
+    <div style="margin-bottom:14px"><span class="tag">Ø 40–60mm</span><span class="tag">3mm wall</span><span class="tag">Painted</span><span class="tag">Council owned</span></div>
+    <div class="placeholder-block"><strong>[ Drawing ]</strong>Technical profile: diameter range, wall thickness, post spacing, base plate or cast-in socket.</div>
+    <div class="placeholder-block"><strong>[ Photo documentation ]</strong>Examples from Chicksand, Vallance Road, Bethnal Green.</div>
+    <div class="section-label">Compatible attachments</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('attachment-logics')"><span>View attachment logics</span><span class="arrow">→</span></button></li>
+    </ul>
+    <div class="placeholder-block"><strong>[ Load capacity ]</strong>Typical spanning capacity, moment resistance, and what this railing can reasonably bear without modification.</div>
+  </div>
+
+  <!-- INFORMAL USES -->
+  <div id="page-informal-uses" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Existing informal uses</div>
+    <div class="page-subtitle">What people already hang, lean, tie, and build onto railings — before any designed intervention.</div>
+    <div class="placeholder-block"><strong>[ Photo survey ]</strong>Documented informal uses: washing lines, bike locks, planters, signs, makeshift shelters, curtains, bags.</div>
+    <div class="section-label">Categories</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-label">Hanging</div><div class="card-title">Washing, bags, tools</div></div>
+      <div class="card"><div class="card-label">Leaning</div><div class="card-title">Bikes, boards, ladders</div></div>
+      <div class="card"><div class="card-label">Tying</div><div class="card-title">Plants, signs, nets</div></div>
+      <div class="card"><div class="card-label">Building</div><div class="card-title">Shelters, tables, frames</div></div>
+    </div>
+    <div class="placeholder-block"><strong>[ Map overlay ]</strong>Spatial distribution of informal uses across Chicksand Estate — which railings are already activated.</div>
+  </div>
+
+  <!-- ATTACHMENT LOGICS -->
+  <div id="page-attachment-logics" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Attachment logics</div>
+    <div class="page-subtitle">How things connect to railings — reversibly, without damage, without permission.</div>
+    <div class="placeholder-block"><strong>[ Logic diagram ]</strong>Matrix of attachment methods against railing types — clamp, loop, saddle, bracket, cable tie, bungee, friction fit.</div>
+    <div class="section-label">Methods</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('attachment-page')"><span>Tube clamp (scaffold)</span><span class="meta">Most versatile</span></button></li>
+      <li><button class="nav-btn"><span>Loop lashing</span></button></li>
+      <li><button class="nav-btn"><span>Saddle bracket</span></button></li>
+      <li><button class="nav-btn"><span>Friction channel</span></button></li>
+      <li><button class="nav-btn"><span>Cable tie array</span></button></li>
+    </ul>
+  </div>
+
+  <!-- ONE ATTACHMENT LOGIC -->
+  <div id="page-attachment-page" class="page">
+    <button class="back-btn" onclick="go('attachment-logics')">← Attachment logics</button>
+    <div class="page-title">Tube clamp (scaffold)</div>
+    <div style="margin-bottom:14px"><span class="tag">Reversible</span><span class="tag">No damage</span><span class="tag">Load-bearing</span><span class="tag">48.3mm OD</span></div>
+    <div class="placeholder-block"><strong>[ Detail drawing ]</strong>Clamp types — single, swivel, putlog — with torque specification and load ratings.</div>
+    <div class="placeholder-block"><strong>[ Step-by-step ]</strong>1. Measure railing OD. 2. Select clamp size. 3. Position. 4. Tighten to 50Nm. 5. Test.</div>
+    <div class="section-label">Tools needed</div>
+    <div style="margin-bottom:12px"><span class="tag">Spanner 17mm</span><span class="tag">Torque wrench</span><span class="tag">Tape measure</span></div>
+    <div class="section-label">Prototypes using this</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('prototype-library')"><span>View prototype library</span><span class="arrow">→</span></button></li>
+    </ul>
+  </div>
+
+  <!-- TOUCHING THE GROUND -->
+  <div id="page-ground" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Touching the ground</div>
+    <div class="page-subtitle">What happens at the base — how structures meet the floor without fixing, damaging, or requiring planning permission.</div>
+    <div class="placeholder-block"><strong>[ Ground condition matrix ]</strong>Tarmac / concrete / grass / compacted earth — loading assumptions, frost heave, drainage, reversibility requirements.</div>
+    <div class="section-label">Ground types</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-label">Hard standing</div><div class="card-title">Tarmac, concrete, setts</div></div>
+      <div class="card"><div class="card-label">Soft ground</div><div class="card-title">Grass, earth, gravel</div></div>
+      <div class="card"><div class="card-label">Threshold</div><div class="card-title">Steps, curbs, ramps</div></div>
+      <div class="card"><div class="card-label">Elevated</div><div class="card-title">Deck, plinth, roof</div></div>
+    </div>
+    <div class="placeholder-block"><strong>[ Strategies ]</strong>Ballast feet, spreader plates, adjustable pedestals, grass protection matting — with weight / footprint / reversibility rating.</div>
+  </div>
+
+  <!-- PROTOTYPE LIBRARY -->
+  <div id="page-prototype-library" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Prototype library</div>
+    <div class="page-subtitle">Tested configurations — from simple hanging systems to full scaffold structures — with drawings and build notes.</div>
+    <div class="placeholder-block"><strong>[ Filter by scale / use / railing type ]</strong></div>
+    <div class="section-label">Prototypes</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('prototype-page')"><span>Hanging shelf unit</span><span class="meta">Domestic scale</span></button></li>
+      <li><button class="nav-btn"><span>Canopy frame</span><span class="meta">2×2m</span></button></li>
+      <li><button class="nav-btn"><span>Notice board mount</span><span class="meta">Lightweight</span></button></li>
+      <li><button class="nav-btn"><span>Planter bracket array</span></button></li>
+      <li><button class="nav-btn" onclick="go('contribute')"><span>[ Add prototype ]</span><span class="meta">Contribute</span></button></li>
+    </ul>
+  </div>
+
+  <!-- ONE PROTOTYPE PAGE -->
+  <div id="page-prototype-page" class="page">
+    <button class="back-btn" onclick="go('prototype-library')">← Prototype library</button>
+    <div class="page-title">Hanging shelf unit</div>
+    <div style="margin-bottom:14px"><span class="tag">Reversible</span><span class="tag">1 person build</span><span class="tag">~£40 materials</span><span class="tag">2hrs</span></div>
+    <div class="placeholder-block"><strong>[ Drawing: plan + section + detail ]</strong>At 1:20. All components labelled. Dimensions in mm.</div>
+    <div class="placeholder-block"><strong>[ Bill of materials ]</strong>Scaffold clamps ×4, timber board 900×200mm, M10 threaded rod, wing nuts ×4.</div>
+    <div class="placeholder-block"><strong>[ Build sequence ]</strong>Step-by-step with photos or line drawings.</div>
+    <div class="section-label">Attachment used</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn" onclick="go('attachment-page')"><span>Tube clamp (scaffold)</span><span class="arrow">→</span></button></li>
+    </ul>
+  </div>
+
+  <!-- CHICKSAND MAP -->
+  <div id="page-chicksand-map" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Chicksand test case</div>
+    <div class="page-subtitle">A live survey of the Chicksand Estate, Whitechapel — railing inventory, informal uses, and tested prototype locations.</div>
+    <div class="placeholder-block"><strong>[ Interactive map ]</strong>Plotted at 1:500. Layers: railing types / informal uses / tested sites / grey zone status. Each pin opens a railing record.</div>
+    <div class="placeholder-block"><strong>[ Estate overview ]</strong>Construction date, ownership structure, management body, relevant planning constraints.</div>
+    <div class="section-label">Survey notes</div>
+    <div class="placeholder-block"><strong>[ Field observations ]</strong>Site visit notes, photographs, measurements. Ongoing — last updated [date].</div>
+  </div>
+
+  <!-- POLITICS -->
+  <div id="page-politics" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Politics / grey zone</div>
+    <div class="page-subtitle">What's legal, what's tolerated, what's contested — and how to navigate it without asking permission you won't get.</div>
+    <div class="placeholder-block"><strong>[ Legal framework ]</strong>Public land ownership, highways act, planning use classes, temporary structures under 28-day rule, licence vs permission.</div>
+    <div class="section-label">Questions</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn"><span>Who owns the railing?</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn"><span>Is this a structure?</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn"><span>What triggers enforcement?</span><span class="arrow">→</span></button></li>
+      <li><button class="nav-btn"><span>Collective vs individual action</span><span class="arrow">→</span></button></li>
+    </ul>
+    <div class="placeholder-block"><strong>[ Case precedents ]</strong>Documented instances of council tolerance, removal, and negotiation — UK-based.</div>
+  </div>
+
+  <!-- TOOLKIT -->
+  <div id="page-toolkit" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Toolkit / downloads</div>
+    <div class="page-subtitle">Templates, survey sheets, drawings, and reference material — free to use and adapt.</div>
+    <div class="section-label">Downloads</div>
+    <ul class="nav-list">
+      <li><button class="nav-btn"><span>Site survey sheet (A4)</span><span class="meta">↓</span></button></li>
+      <li><button class="nav-btn"><span>Railing measurement guide</span><span class="meta">↓</span></button></li>
+      <li><button class="nav-btn"><span>Attachment logic matrix (PDF)</span><span class="meta">↓</span></button></li>
+      <li><button class="nav-btn"><span>Prototype drawings pack</span><span class="meta">↓</span></button></li>
+      <li><button class="nav-btn"><span>Legal grey zone summary</span><span class="meta">↓</span></button></li>
+    </ul>
+    <div class="placeholder-block"><strong>[ GitHub / source ]</strong>All drawings and content licensed CC BY-SA. Link to repo.</div>
+  </div>
+
+  <!-- CONTRIBUTE -->
+  <div id="page-contribute" class="page">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-title">Contribute</div>
+    <div class="page-subtitle">Add a railing type you've documented, a prototype you've built, or a site you've surveyed.</div>
+    <div class="section-label">What you can add</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-label">New entry</div><div class="card-title">Railing type</div></div>
+      <div class="card"><div class="card-label">New entry</div><div class="card-title">Prototype</div></div>
+      <div class="card"><div class="card-label">New entry</div><div class="card-title">Site survey</div></div>
+      <div class="card"><div class="card-label">New entry</div><div class="card-title">Attachment method</div></div>
+    </div>
+    <div class="placeholder-block"><strong>[ Submission form ]</strong>Name (optional), location, category, description, photos. Reviewed before publishing.</div>
+    <div class="placeholder-block"><strong>[ Submission guidelines ]</strong>What makes a good entry — measurement standards, photo requirements, licence agreement.</div>
+  </div>
+
+  <!-- DRAWER NAV -->
+  <div class="drawer" id="nav-drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">All pages</span>
+      <button class="close-btn" id="close-drawer" aria-label="Close menu">✕</button>
+    </div>
+    <div class="drawer-section-label">Main</div>
+    <button class="drawer-item" onclick="go('home')">Home <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('find-condition')">Find your condition <span class="arrow">→</span></button>
+    <div class="drawer-section-label">Catalogue</div>
+    <button class="drawer-item" onclick="go('railing-taxonomy')">Railing taxonomy <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('railing-type')">— One railing type page <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('informal-uses')">Existing informal uses <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('attachment-logics')">Attachment logics <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('attachment-page')">— One attachment logic page <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('ground')">Touching the ground <span class="arrow">→</span></button>
+    <div class="drawer-section-label">Build</div>
+    <button class="drawer-item" onclick="go('prototype-library')">Prototype library <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('prototype-page')">— One prototype manual page <span class="arrow">→</span></button>
+    <div class="drawer-section-label">Test case + politics</div>
+    <button class="drawer-item" onclick="go('chicksand-map')">Chicksand test case map <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('politics')">Politics / grey zone <span class="arrow">→</span></button>
+    <div class="drawer-section-label">Open source</div>
+    <button class="drawer-item" onclick="go('toolkit')">Toolkit / downloads <span class="arrow">→</span></button>
+    <button class="drawer-item" onclick="go('contribute')">Contribute <span class="arrow">→</span></button>
+  </div>
+</div>
+
+<script>
+  const titles = {
+    'home': 'Railing Manual',
+    'find-condition': 'Find your condition',
+    'railing-taxonomy': 'Railing taxonomy',
+    'railing-type': 'Mild steel tube',
+    'informal-uses': 'Informal uses',
+    'attachment-logics': 'Attachment logics',
+    'attachment-page': 'Tube clamp',
+    'ground': 'Touching the ground',
+    'prototype-library': 'Prototype library',
+    'prototype-page': 'Hanging shelf unit',
+    'chicksand-map': 'Chicksand map',
+    'politics': 'Politics / grey zone',
+    'toolkit': 'Toolkit',
+    'contribute': 'Contribute'
+  };
+
+  function go(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const p = document.getElementById('page-' + id);
+    if (p) { p.classList.add('active'); window.scrollTo(0, 0); }
+    document.getElementById('topbar-title').textContent = titles[id] || id;
+    document.getElementById('nav-drawer').classList.remove('open');
+  }
+
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('nav-drawer').classList.add('open');
+    window.scrollTo(0, 0);
+  });
+
+  document.getElementById('close-drawer').addEventListener('click', () => {
+    document.getElementById('nav-drawer').classList.remove('open');
+  });
+</script>
+</body>
+</html>
